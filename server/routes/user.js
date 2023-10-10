@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("../models/UserModel");
 const hashPassword = require("../middleware/hash");
+const validate = require("../middleware/validation")
 router.use(express.json());
 
 router.get("/users", async (req, res) => {
@@ -13,7 +14,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.post("/user", hashPassword, async (req, res) => {
+router.post("/user", validate, hashPassword, async (req, res) => {
   try {
     const payload = req.body;
     const userData = await userModel.create({ ...payload });
@@ -24,7 +25,7 @@ router.post("/user", hashPassword, async (req, res) => {
   }
 });
 
-router.put("/user/:_id", hashPassword, async (req, res) => {
+router.put("/user/:_id", validate, hashPassword, async (req, res) => {
   const { _id } = req.params;
   const payload = req.body;
   try {
